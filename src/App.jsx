@@ -55,6 +55,12 @@ import { Acreditados } from "./pages/crud/Acreditados";
 import { Administradores } from "./pages/crud/Administradores";
 import { Plataformas } from "./pages/crud/Plataformas";
 import { Campanas } from "./pages/crud/Campanas";
+import { Concesionarios } from "./pages/crud/Concesionarios";
+import { Modelos } from "./pages/crud/Modelos";
+import { DocumentosModelos } from "./pages/crud/DocumentosModelos";
+import { SeccionesCampanas } from "./pages/crud/SeccionesCampanias";
+import { Galeria } from "./pages/crud/Galeria";
+import { Menugeneral } from "./pages/crud/Menugeneral";
 
 const App = () => {
 	const [layoutMode, setLayoutMode] = useState("static");
@@ -152,14 +158,35 @@ const App = () => {
 					to: "/campanas",
 				},
 				{
-					label: "Menu Princial",
-					icon: "pi pi-fw pi-building",
-					to: "/MenuPrincipal",
+					label: "Secciones Campañas",
+					icon: "pi pi-globe",
+					to: "/seccionescampanas",
 				},
 				{
-					label: "Ediciones BAM",
+					label: "Concesionarios",
+					icon: "pi pi-fw pi-building",
+					to: "/concesionarios",
+				},
+				{
+					label: "Modelos",
 					icon: "pi pi-globe",
-					to: "/ediciones",
+					to: "/modelos",
+				},
+				{
+					label: "Documentos Modelo",
+					icon: "pi pi-globe",
+					to: "/documentosmodelos",
+				},
+				{
+					label: "Galeria Modulo",
+					icon: "pi pi-globe",
+					to: "/galerialmodulos",
+				},
+
+				{
+					label: "Menu General",
+					icon: "pi pi-globe",
+					to: "/menugeneral",
 				},
 				{
 					label: "Labels",
@@ -443,6 +470,27 @@ const App = () => {
 						/>
 						<Route path='/plataformas' element={<Plataformas />} />
 						<Route path='/campanas' element={<Campanas />} />
+						<Route
+							path='/concesionarios'
+							element={<Concesionarios />}
+						/>
+						<Route path='/modelos' element={<Modelos />} />
+						<Route
+							path='/seccionescampanas'
+							element={<SeccionesCampanas />}
+						/>
+						<Route
+							path='/documentosmodelos'
+							element={<DocumentosModelos />}
+						/>
+						<Route
+							path='/galerialmodulos'
+							element={<Galerias />}
+						/>
+						<Route
+							path='/menugeneral'
+							element={<Menugeneral />}
+						/>
 
 						{/* Mi menu */}
 
@@ -454,10 +502,10 @@ const App = () => {
 						<Route path='/contenidos' element={<Contenidos />} />
 						<Route path='/equipo' element={<Equipo />} />
 						<Route path='/perfiles' element={<Perfiles />} />
-						<Route
+						{/* <Route
 							path='/MenuPrincipal'
-							element={<MenuPrincipal />}
-						/>
+							element={<Menugeneral />}
+						/> */}
 						<Route path='/ediciones' element={<Ediciones />} />
 						<Route path='/banners/:grupo' element={<Banners />} />
 						<Route path='/noticas/:grupo' element={<Noticas />} />

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
-import { Carousel } from "primereact/carousel";
+// import { useParams } from "react-router-dom";
+
 import classNames from "classnames";
 import {
 	Column,
@@ -8,7 +8,8 @@ import {
 	Button,
 	Dialog,
 	InputText,
-	Divider,
+	Calendar,
+	Dropdown,
 } from "../../components/crud";
 import { Conexion } from "../../service/Conexion";
 import {
@@ -20,12 +21,11 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setDataSet, setFormData } from "../../store/appSlice";
 import { Cargando } from "../../components/crud/Cargando";
-import { ImagenCampo } from "../../components/crud/ImagenCampo";
+import { AdjuntoCampo } from "../../components/crud/AdjuntoCampo";
+// import { ImagenCampo } from "../../components/crud/ImagenCampo";
 
-// leonardo
-
-export const Galerias = () => {
-	const TABLA = "galeriaimagenes";
+export const DocumentosModelos = () => {
+	const TABLA = "documentocampama";
 	let emptyFormData = {};
 	const { dataSet, formData } = useSelector((state) => state.appsesion); //datos el storage redux
 	const dispatch = useDispatch();
@@ -36,9 +36,27 @@ export const Galerias = () => {
 	const [recargar, setrecargar] = useState(0);
 	const [cargando, setCargando] = useState(false);
 	const datatable = new Conexion();
-	const [products, setProducts] = useState([]);
-	let tituloiter = "Galeria";
-	let { grupo } = useParams();
+	const [dropdownTipoDocumentos, setdropdownTipoDocumentos] = useState(null);
+	const [dropdownModelos, setdropdownModelos] = useState(null);
+	// const [dropdownTipoAliado, setdropdownTipoAliado] = useState(null);
+	// const [dropdownTipoAliado, setdropdownTipoAliado] = useState(null);
+
+	// console.log({grupo});
+
+	useEffect(() => {
+		//solo para que se ejecute una vez al inicio
+		/** setting parametros dropdowns u otros objetos independientes */
+		datatable
+			.gettable("parametros/parametros/tipodocumentocampana")
+			.then((datos) => {
+				setdropdownTipoDocumentos(datos);
+			});
+		datatable.gettable("parametros/modelos").then((datos) => {
+			setdropdownModelos(datos);
+		});
+
+		/** setting parametros dropdowns u otros objetos independientes */
+	}, []);
 
 	useEffect(() => {
 		//cargar la data total
@@ -51,16 +69,9 @@ export const Galerias = () => {
 		});
 	}, [recargar]);
 
-	useEffect(() => {
-		// console.log("mi efecto detalle galeria", formData);
-		saveImagenDetalle();
-		console.log({formData});
-	}, [formData]);
-
 	/*eventos*/
 	const openNew = () => {
 		dispatch(setFormData(emptyFormData));
-		setProducts([]);
 		setSubmitted(false);
 		setProductDialog(true);
 	};
@@ -80,13 +91,6 @@ export const Galerias = () => {
 			.then((data) => dispatch(setFormData({ ...data.data })));
 		setProductDialog(true);
 		setCargando(false);
-		datatable
-			.gettable("parametros/galeriaimagenesdetalle/" + id)
-			.then((datos) => {
-				// console.table(datos);
-				setProducts(datos);
-				setCargando(false);
-			});
 	};
 
 	const confirmDeleteProduct = (fila) => {
@@ -106,15 +110,22 @@ export const Galerias = () => {
 		});
 	};
 
+	const onInputChangeDate = (e, name) => {
+		const val = e.value.toISOString().split("T")[0] || "";
+		let _product = { ...formData };
+		_product[`${name}`] = val;
+		dispatch(setFormData(_product));
+	};
+
 	/*eventos*/
 
 	/**operacion transacciones */
 	const saveProduct = () => {
 		setSubmitted(true);
-		if (formData.nom_gal?.trim()) {
-			// console.log(formData);
+		if (formData.cod_tip_doc?.trim()) {
+			console.log(formData);
 			// debugger
-			setCargando(true);
+			// setCargando(true);
 			if (formData.id == null) {
 				//nuevo registro
 				datatable
@@ -128,45 +139,10 @@ export const Galerias = () => {
 			}
 		}
 	};
-
-	const saveImagenDetalle = () => {
-		// console.log("entro a insertar detalle");
-		setSubmitted(true);
-		if (formData.img_dal?.trim()) {
-			setCargando(true);
-			if (formData.id) {
-				//nuevo registro
-				datatable
-					.getCrearItem("galeriaimagenesdetalle", formData)
-					.then((data) => {
-						setCargando(false);
-						// console.log("llego al final");
-
-						datatable
-							.gettable(
-								"parametros/galeriaimagenesdetalle/" +
-								formData.id
-							)
-							.then((datos) => {
-								// console.table(datos);
-								// console.log(datos.length);
-								setProducts(datos);
-								setCargando(false);
-							});
-					});
-			}
-		}
-	};
-
 	const deleteProduct = () =>
 		datatable
 			.getEliminarItem(TABLA, formData, formData.id)
 			.then((data) => trasaccionExitosa("borrar"));
-
-	// const deleteIamgen = (id) =>
-	// 	datatable
-	// 		.getEliminarItem("galeriaimagenesdetalle", formData, id)
-	// 		.then((data) => trasaccionExitosa("borrar"));
 	/**operacion transacciones */
 
 	/* validaciones de campos */
@@ -175,7 +151,7 @@ export const Galerias = () => {
 		const val = (e.target && e.target.value) || "";
 		let _product = { ...formData };
 		_product[`${name}`] = val;
-		_product[`${"tip_not"}`] = grupo; //solo para guardar noticias
+
 		// console.log(_product);
 		dispatch(setFormData(_product));
 	};
@@ -192,79 +168,13 @@ export const Galerias = () => {
 					className='p-button-rounded p-button-success mr-2'
 					onClick={() => editProduct(rowData.id)}
 				/>
-				{/* <Button
+				<Button
 					icon='pi pi-trash'
 					className='p-button-rounded p-button-warning mr-2'
 					onClick={() => confirmDeleteProduct(rowData)}
-				/> */}
+				/>
 			</div>
 		);
-	};
-
-	const responsiveOptions = [
-		{
-			breakpoint: "480px",
-			numVisible: 2,
-			numScroll: 2,
-		},
-		{
-			breakpoint: "480px",
-			numVisible: 2,
-			numScroll: 2,
-		},
-		{
-			breakpoint: "480px",
-			numVisible: 1,
-			numScroll: 1,
-		},
-	];
-	const productTemplate = (product) => {
-		// console.log(product);
-		return (
-			<div className='product-item'>
-				<div className='product-item-content'>
-					<div className='mb-1'>
-						<img
-							src={`${product.img_dal}`}
-							onError={(e) =>
-							(e.target.src =
-								"https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png")
-							}
-							alt={product.name}
-							className='product-image'
-						/>
-					</div>
-					<div>
-						<div className='car-buttons mt-2'>
-							<Button
-								icon='pi pi-trash'
-								className='p-button p-button-rounded mr-2'
-								onClick={() => borrarImagen(product.id)}
-							/>
-						</div>
-					</div>
-				</div>
-			</div>
-		);
-	};
-
-	const borrarImagen = (idImagen) => {
-		setCargando(true);
-		setProducts([]);
-		datatable
-			.getEliminarItem("galeriaimagenesdetalle", formData, idImagen)
-			.then((data) =>
-				datatable
-					.gettable(
-						"parametros/galeriaimagenesdetalle/" + formData.id
-					)
-					.then((datos) => {
-						// console.table(datos);
-						// console.log(datos.length);
-						setProducts(datos);
-						setCargando(false);
-					})
-			);
 	};
 
 	return (
@@ -273,17 +183,26 @@ export const Galerias = () => {
 				<div className='card'>
 					<Cargando cargando={cargando} />
 					<Toast ref={toast} />
-					{/* <BarraSuperior openNew={openNew} /> */}
-					<TablaDatos datostabla={dataSet} titulo={tituloiter}>
+					<BarraSuperior openNew={openNew} />
+					<TablaDatos
+						datostabla={dataSet}
+						titulo='Documentos Modelos'>
 						<Column
-							field='nom_gal'
-							header='Nombre'
+							field='tipodocumento'
+							header='Documento'
 							sortable
 							headerStyle={{
-								width: "90%",
+								width: "40%",
 								minWidth: "10rem",
 							}}></Column>
-
+						<Column
+							field='nombremodelo'
+							header='Modelo'
+							sortable
+							headerStyle={{
+								width: "40%",
+								minWidth: "10rem",
+							}}></Column>
 						<Column
 							header='Acciones'
 							body={actionBodyTemplate}></Column>
@@ -292,67 +211,75 @@ export const Galerias = () => {
 					<Dialog
 						visible={productDialog}
 						style={{ width: "850px" }}
-						header={"Detalle " + tituloiter}
+						header='Detalle Documento Modelo'
 						modal={true}
 						className='p-fluid'
 						footer={productDialogFooter(hideDialog, saveProduct)}
 						onHide={hideDialog}>
 						<div className='formgrid grid'>
-							<div className='field col'>
-								{/* <pre>{JSON.stringify(formData, 2)}</pre> */}
-								<label htmlFor='tit_not'>Nombre:</label>
-								<InputText
-									id='nom_gal'
-									value={formData.nom_gal}
-									onChange={(e) =>
-										onInputChange(e, "nom_gal")
-									}
-									required
-									autoFocus
-									className={classNames({
-										"p-invalid":
-											submitted && !formData.nom_gal,
-									})}
+							<div className='field col-6'>
+								{/* <pre>{JSON.stringify(formData,2)}</pre> */}
+								<label htmlFor='cod_tip_doc'>
+									Tipo Documento
+								</label>
+								<Dropdown
+									value={formData.cod_tip_doc}
+									onChange={(e) => {
+										console.log(e.value);
+										dispatch(
+											setFormData({
+												...formData,
+												cod_tip_doc: e.value,
+											})
+										);
+									}}
+									options={dropdownTipoDocumentos}
+									optionLabel='name'
+									placeholder='Seleccione'
 								/>
-								{submitted && !formData.nom_gal && (
+								{submitted && !formData.cod_tip_doc && (
 									<small className='p-invalid'>
 										Campo requerido.
 									</small>
 								)}
 							</div>
+							<div className='field col-6'>
+								<label htmlFor='cod_cod_mod'>Modelo:</label>
+								<Dropdown
+									value={formData.cod_cod_mod}
+									onChange={(e) => {
+										console.log(e.value);
+										dispatch(
+											setFormData({
+												...formData,
+												cod_cod_mod: e.value,
+											})
+										);
+									}}
+									options={dropdownModelos}
+									optionLabel='name'
+									placeholder='Seleccione'
+								/>
+							</div>
 						</div>
 
-						<div className='field'>
-							{formData?.id && (
-								<ImagenCampo
-									label='Imagen'
+						<div className='formgrid grid'>
+							<div className='field col-6'>
+								{/* <label htmlFor='id_ciudad'>Ciudad:</label> */}
+								<AdjuntoCampo
+									label='Adjunto'
 									formData={formData}
-									CampoImagen='img_dal'
+									CampoImagen='nom_doc'
 									nombreCampo='demo'
-									// edicampo={formData.img_not}
-									urlupload='/upload/images/galeria'
+									edicampo={formData.nom_doc}
+									urlupload='/upload/files/pdf'
 								/>
-							)}
-						</div>
-						<Divider />
-						{products.length > 0 && (
-							<div className='carousel-demo'>
-								<div className='card'>
-									<Carousel
-										value={products}
-										numVisible={2}
-										numScroll={1}
-										responsiveOptions={responsiveOptions}
-										itemTemplate={productTemplate}
-										circular={true}
-									/>
-								</div>
 							</div>
-						)}
+						</div>
 					</Dialog>
 					<EliminarVentana
 						deleteProductDialog={deleteProductDialog}
-						product={formData.nom_gal}
+						product={formData.nombre}
 						hideDeleteProductDialog={hideDeleteProductDialog}
 						deleteProduct={deleteProduct}
 					/>

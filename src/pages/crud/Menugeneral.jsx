@@ -10,6 +10,7 @@ import {
 	InputText,
 	Calendar,
 	Dropdown,
+	InputTextarea,
 } from "../../components/crud";
 import { Conexion } from "../../service/Conexion";
 import {
@@ -23,8 +24,8 @@ import { setDataSet, setFormData } from "../../store/appSlice";
 import { Cargando } from "../../components/crud/Cargando";
 // import { ImagenCampo } from "../../components/crud/ImagenCampo";
 
-export const Campanas = () => {
-	const TABLA = "campanias";
+export const Menugeneral = () => {
+	const TABLA = "menugeneral";
 	let emptyFormData = {};
 	const { dataSet, formData } = useSelector((state) => state.appsesion); //datos el storage redux
 	const dispatch = useDispatch();
@@ -35,8 +36,11 @@ export const Campanas = () => {
 	const [recargar, setrecargar] = useState(0);
 	const [cargando, setCargando] = useState(false);
 	const datatable = new Conexion();
-	// const [dropdownSINO, setdropdownSINO] = useState(null);
-	const [dropdownTipoAliado, setdropdownTipoAliado] = useState(null);
+	const [dropdownSINO, setdropdownSINO] = useState(null);
+	const [dropdownCiudades, setdropdownCiudades] = useState(null);
+	const [dropdownMenus, setdropdownMenus] = useState(null);
+	const [dropdownModulos, serdropdownModulos] = useState(null);
+	// const [dropdownTipoAliado, setdropdownTipoAliado] = useState(null);
 	// const [dropdownTipoAliado, setdropdownTipoAliado] = useState(null);
 
 	// console.log({grupo});
@@ -45,7 +49,16 @@ export const Campanas = () => {
 		//solo para que se ejecute una vez al inicio
 		/** setting parametros dropdowns u otros objetos independientes */
 		datatable.gettable("parametros/parametros/si_no").then((datos) => {
-			setdropdownTipoAliado(datos);
+			setdropdownSINO(datos);
+		});
+		// datatable.gettable("parametros/ciudades").then((datos) => {
+		// 	setdropdownCiudades(datos);
+		// });
+		datatable.gettable("parametros/menugeneral").then((datos) => {
+			setdropdownMenus(datos);
+		});
+		datatable.gettable("parametros/modulos").then((datos) => {
+			serdropdownModulos(datos);
 		});
 
 		/** setting parametros dropdowns u otros objetos independientes */
@@ -58,6 +71,7 @@ export const Campanas = () => {
 
 		datatable.gettable(TABLA).then((data) => {
 			dispatch(setDataSet(data));
+			// console.log(data);
 			setCargando(false);
 		});
 	}, [recargar]);
@@ -81,7 +95,18 @@ export const Campanas = () => {
 		setCargando(true);
 		datatable
 			.getItem(TABLA, id)
-			.then((data) => dispatch(setFormData({ ...data.data })));
+			.then((data) => 
+			{	
+
+				// console.log(data)
+				dispatch(setFormData({ ...data }
+					
+				)
+				
+				
+			)
+		}
+		);
 		setProductDialog(true);
 		setCargando(false);
 	};
@@ -115,8 +140,8 @@ export const Campanas = () => {
 	/**operacion transacciones */
 	const saveProduct = () => {
 		setSubmitted(true);
-		if (formData.nom_cam?.trim()) {
-			console.log(formData);
+		if (formData.nom_men?.trim()) {
+			// console.log(formData);
 			// debugger
 			// setCargando(true);
 			if (formData.id == null) {
@@ -177,21 +202,37 @@ export const Campanas = () => {
 					<Cargando cargando={cargando} />
 					<Toast ref={toast} />
 					<BarraSuperior openNew={openNew} />
-					<TablaDatos datostabla={dataSet} titulo='Campañas'>
+					<TablaDatos datostabla={dataSet} titulo='Menu General'>
 						<Column
-							field='nom_cam'
+							field='nom_men'
 							header='Nombre'
 							sortable
 							headerStyle={{
-								width: "40%",
+								width: "30%",
 								minWidth: "10rem",
 							}}></Column>
 						<Column
-							field='ini_cam'
-							header='Fecha'
+							field='menupadre'
+							header='Menu'
 							sortable
 							headerStyle={{
-								width: "40%",
+								width: "20%",
+								minWidth: "10rem",
+							}}></Column>
+						<Column
+							field='ord_men'
+							header='Orden'
+							sortable
+							headerStyle={{
+								width: "20%",
+								minWidth: "10rem",
+							}}></Column>
+						<Column
+							field='activo'
+							header='Activo'
+							sortable
+							headerStyle={{
+								width: "20%",
 								minWidth: "10rem",
 							}}></Column>
 						<Column
@@ -202,7 +243,7 @@ export const Campanas = () => {
 					<Dialog
 						visible={productDialog}
 						style={{ width: "850px" }}
-						header='Detalle Campaña'
+						header='Detalle Menu'
 						modal={true}
 						className='p-fluid'
 						footer={productDialogFooter(hideDialog, saveProduct)}
@@ -210,81 +251,180 @@ export const Campanas = () => {
 						<div className='formgrid grid'>
 							<div className='field col-6'>
 								{/* <pre>{JSON.stringify(formData,2)}</pre> */}
-								<label htmlFor='nom_cam'>Nombre</label>
+								<label htmlFor='nom_men'>Nombre</label>
 								<InputText
-									id='nom_cam'
-									value={formData.nom_cam}
-									onChange={(e) =>
-										onInputChange(e, "nom_cam")
-									}
+									id='nom_men'
+									value={formData.nom_men}
+									onChange={(e) => onInputChange(e, "nom_men")}
 									required
 									autoFocus
 									className={classNames({
 										"p-invalid":
-											submitted && !formData.nom_cam,
+											submitted && !formData.nom_men,
 									})}
 								/>
-								{submitted && !formData.nom_cam && (
+								{submitted && !formData.nom_men && (
 									<small className='p-invalid'>
 										Campo requerido.
 									</small>
 								)}
 							</div>
 							<div className='field col-6'>
-								<label htmlFor='ini_cam'>Fecha:</label>
-								<Calendar
-									id='basic'
-									// value={new Date(formData.ini_cam)}
-									value={
-										new Date(formData.ini_cam + "T00:00:00")
-									}
-									onChange={(e) =>
-										onInputChangeDate(e, "ini_cam")
-									}
-									// dateFormat='dd/mm/yy'
-									dateFormat='yy-mm-dd'
-								/>
-							</div>
-						</div>
-
-						<div className='formgrid grid'>
-							<div className='field col-6'>
-								<label htmlFor='mat_cam'>Ruta dropbox:</label>
-								<InputText
-									id='mat_cam'
-									value={formData.mat_cam}
-									onChange={(e) =>
-										onInputChange(e, "mat_cam")
-									}
-								/>
-							</div>
-							<div className='field col-6'>
-								<label htmlFor='act_cam'>
-									Activar Campaña:
-								</label>
+								<label htmlFor='pad_men'>Menu:</label>
 								<Dropdown
-									value={formData.act_cam}
+									value={formData.pad_men}
 									onChange={(e) => {
-										console.log(e.value);
+										// console.log(e.value);
 										dispatch(
 											setFormData({
 												...formData,
-												act_cam: e.value,
+												pad_men: e.value,
 											})
 										);
 									}}
-									options={dropdownTipoAliado}
+									options={dropdownMenus}
 									optionLabel='name'
 									placeholder='Seleccione'
 								/>
 							</div>
 						</div>
 
+						<div className='formgrid grid'>
+							<div className='field col-6'>
+								<label htmlFor='des_men'>Activar:</label>
+								<Dropdown
+									value={formData.des_men}
+									onChange={(e) => {
+										// console.log(e.value);
+										dispatch(
+											setFormData({
+												...formData,
+												des_men: e.value,
+											})
+										);
+									}}
+									options={dropdownSINO}
+									optionLabel='name'
+									placeholder='Seleccione'
+								/>
+							</div>
+							<div className='field col-6'>
+								<label htmlFor='cod_mod'>Modulo:</label>
+								<Dropdown
+									value={formData.cod_mod}
+									onChange={(e) => {
+										// console.log(e.value);
+										dispatch(
+											setFormData({
+												...formData,
+												cod_mod: e.value,
+											})
+										);
+									}}
+									options={dropdownModulos}
+									optionLabel='name'
+									placeholder='Seleccione'
+								/>
+							</div>
+						</div>
+
+						<div className='formgrid grid'>
+							<div className='field col-6'>
+								<label htmlFor='rut_men'>Ruta:</label>
+								<InputText
+									id='rut_men'
+									value={formData.rut_men}
+									onChange={(e) =>
+										onInputChange(e, "rut_men")
+									}
+								/>
+							</div>
+							<div className='field col-6'>
+								<label htmlFor='ord_men'>Orden:</label>
+								<InputText
+									id='ord_men'
+									value={formData.ord_men}
+									onChange={(e) =>
+										onInputChange(e, "ord_men")
+									}
+								/>
+							</div>
+						</div>
+
+						<div className='formgrid grid'>
+							<div className='field col-6'>
+								<label htmlFor='ext_men'>Url Externa:</label>
+								<Dropdown
+									value={formData.ext_men}
+									onChange={(e) => {
+										// console.log(e.value);
+										dispatch(
+											setFormData({
+												...formData,
+												ext_men: e.value,
+											})
+										);
+									}}
+									options={dropdownSINO}
+									optionLabel='name'
+									placeholder='Seleccione'
+								/>
+							</div>
+							<div className='field col-6'>
+								<label htmlFor='box_men'>Dropbox:</label>
+								<Dropdown
+									value={formData.box_men}
+									onChange={(e) => {
+										// console.log(e.value);
+										dispatch(
+											setFormData({
+												...formData,
+												box_men: e.value,
+											})
+										);
+									}}
+									options={dropdownSINO}
+									optionLabel='name'
+									placeholder='Seleccione'
+								/>
+							</div>
+						</div>
+
+						<div className='field col'>
+							<label htmlFor='tit_men'>Titulo:</label>
+							<InputTextarea
+								id='tit_men'
+								value={formData.tit_men}
+								onChange={(e) =>
+									onInputChange(e, "tit_men")
+								}
+								required
+								rows={6}
+								cols={20}
+							/>
+						</div>
+
+						<div className='field col'>
+							<label htmlFor='ent_men'>Descripcion:</label>
+							<InputTextarea
+								id='ent_men'
+								value={formData.ent_men}
+								onChange={(e) =>
+									onInputChange(e, "ent_men")
+								}
+								required
+								rows={6}
+								cols={20}
+							/>
+						</div>
+
+
+
 						<div className='formgrid grid'></div>
 					</Dialog>
 					<EliminarVentana
 						deleteProductDialog={deleteProductDialog}
-						product={formData.nom_cam}
+						product={formData.nombre}
 						hideDeleteProductDialog={hideDeleteProductDialog}
 						deleteProduct={deleteProduct}
 					/>
