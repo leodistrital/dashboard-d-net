@@ -61,6 +61,7 @@ import { DocumentosModelos } from "./pages/crud/DocumentosModelos";
 import { SeccionesCampanas } from "./pages/crud/SeccionesCampanias";
 import { Galeria } from "./pages/crud/Galeria";
 import { Menugeneral } from "./pages/crud/Menugeneral";
+import { BotonesModulos } from "./pages/crud/BotonesModulos";
 
 const App = () => {
 	const [layoutMode, setLayoutMode] = useState("static");
@@ -139,13 +140,18 @@ const App = () => {
 
 	const menu = [
 		{
-			label: "SEGURIDAD",
+			label: "DNET",
 			icon: "pi pi-fw pi-bookmark",
 			items: [
 				{
 					label: "Administradores",
 					icon: "pi pi-globe",
 					to: "/administradores",
+				},
+				{
+					label: "Botones por Modulo",
+					icon: "pi pi-globe",
+					to: "/botonesaplicaciones",
 				},
 				{
 					label: "Plataformas",
@@ -189,96 +195,90 @@ const App = () => {
 					to: "/menugeneral",
 				},
 				{
-					label: "Labels",
+					label: "Galeria Campañas",
 					icon: "pi pi-globe",
-					to: "/label",
+					to: "/menugeneral",
 				},
-				{
-					label: "Galeria de Imagenes",
-					icon: "pi pi-globe",
-					to: "/galeria",
-				},
+				// {
+				// 	label: "Labels",
+				// 	icon: "pi pi-globe",
+				// 	to: "/label",
+				// },
+				// {
+				// 	label: "Galeria de Imagenes",
+				// 	icon: "pi pi-globe",
+				// 	to: "/galeria",
+				// },
 			],
 		},
 		{
-			label: "WEBSITE",
+			label: "CARTELERA",
 			icon: "pi pi-fw pi-bookmark",
 			items: [
 				{
-					label: "Sitio",
+					label: "Diapositivas",
 					icon: "pi pi-globe",
 					to: "/sitio",
 				},
 				{
-					label: "Menu Princial",
+					label: "Pico y Placa",
 					icon: "pi pi-fw pi-building",
 					to: "/MenuPrincipal",
 				},
 				{
-					label: "Ediciones BAM",
+					label: "Parrilla",
 					icon: "pi pi-globe",
 					to: "/ediciones",
 				},
 				{
-					label: "Labels",
+					label: "Widget contenido",
 					icon: "pi pi-globe",
 					to: "/label",
 				},
 				{
-					label: "Galeria de Imagenes",
+					label: "Tipo Contenido",
 					icon: "pi pi-globe",
 					to: "/galeria",
 				},
 			],
 		},
 		{
-			label: "HOME",
+			label: "CONCESIONARIO",
 			icon: "pi pi-fw pi-bookmark",
 			items: [
 				{
-					label: "Banner Imagen",
+					label: "Citas",
 					icon: "pi pi-briefcase",
 					to: "/banners/1",
 				},
 				{
-					label: "Banner Textos",
+					label: "Parrilla",
 					icon: "pi pi-fw pi-id-card",
 					to: "/banners/2",
-				},
-				{
-					label: "Banner Logos",
-					icon: "pi pi-fw pi-id-card",
-					to: "/banners/3",
-				},
-				{
-					label: "Noticias",
-					icon: "pi pi-file-pdf",
-					to: "/noticas/1",
-				},
-				{
-					label: "Destacados",
-					icon: "pi pi-sitemap",
-					to: "/noticas/2",
-				},
-
-				{
-					label: "Recomendaciones",
-					icon: "pi pi-fw pi-id-card",
-					to: "/noticas/3",
-				},
-				{
-					label: "Video Promocional",
-					icon: "pi pi-fw pi-id-card",
-					to: "/videopromo",
 				},
 			],
 		},
 		{
-			label: "ACERCA DEL BAM",
+			label: "SEGURIDAD",
 			icon: "pi pi-fw pi-bookmark",
 			items: [
 				{
-					label: "Secciones",
+					label: "Perfiles",
+					icon: "pi pi-book",
+					to: "/contenidos",
+				},
+				{
+					label: "Administradores",
+					icon: "pi pi-book",
+					to: "/contenidos",
+				},
+				{
+					label: "Usuarios",
+					icon: "pi pi-book",
+					to: "/contenidos",
+				},
+				{
+					label: "Logs",
 					icon: "pi pi-book",
 					to: "/contenidos",
 				},
@@ -287,140 +287,31 @@ const App = () => {
 				// 	icon: "pi pi-book",
 				// 	to: "/contenidos",
 				// },
-				{
-					label: "cifras",
-					icon: "pi pi-book",
-					to: "/cifras",
-				},
-				{
-					label: "FAQ",
-					icon: "pi pi-book",
-					to: "/faq",
-				},
-				{
-					label: "Aliados",
-					icon: "pi pi-book",
-					to: "/aliados",
-				},
-				{
-					label: "Sedes",
-					icon: "pi pi-book",
-					to: "/sedes",
-				},
-				{
-					label: "Equipo",
-					icon: "pi pi-book",
-					to: "/equipo",
-				},
-			],
-		},
-		{
-			label: "CONVOCATORIA",
-			icon: "pi pi-fw pi-bookmark",
-			items: [
-				{
-					label: "Categorias",
-					icon: "pi pi-book",
-					to: "/convocatoriacategorias",
-				},
-			],
-		},
-		{
-			label: "SELECCIONADOS",
-			icon: "pi pi-fw pi-bookmark",
-			items: [
-				{
-					label: "Categorias",
-					icon: "pi pi-book",
-					to: "/Categorias",
-				},
-				{
-					label: "Seleccionados",
-					icon: "pi pi-book",
-					to: "/proyectos",
-				},
-				{
-					label: "Comite Evaluador",
-					icon: "pi pi-book",
-					to: "/comiteseleccion",
-				},
-			],
-		},
-		{
-			label: "EVENTOS",
-			icon: "pi pi-fw pi-bookmark",
-			items: [
-				{
-					label: "Programacion",
-					icon: "pi pi-book",
-					to: "/programacionEventos",
-				},
-				{
-					label: "Speakers",
-					icon: "pi pi-book",
-					to: "/speakers/0",
-				},
-			],
-		},
-		{
-			label: "BAM REGIONES",
-			icon: "pi pi-fw pi-bookmark",
-			items: [
-				{
-					label: "Regiones",
-					icon: "pi pi-book",
-					to: "/regiones",
-				},
-				{
-					label: "Programacion",
-					icon: "pi pi-book",
-					to: "/eventosregion",
-				},
-
-				{
-					label: "Speakers",
-					icon: "pi pi-book",
-					to: "/speakersregion/1",
-				},
-
-				{
-					label: "Participan",
-					icon: "pi pi-book",
-					to: "/participanBam",
-				},
-			],
-		},
-		{
-			label: "OFICINA DE PRENSA",
-			icon: "pi pi-fw pi-bookmark",
-			items: [
-				{
-					label: "Prensa",
-					icon: "pi pi-book",
-					to: "/newsletters",
-				},
-			],
-		},
-		{
-			label: "ACREDITACIONES",
-			icon: "pi pi-fw pi-bookmark",
-			items: [
-				{
-					label: "Acreditados",
-					icon: "pi pi-book",
-					to: "/acreditados",
-				},
-				{
-					label: "Aliados",
-					icon: "pi pi-book",
-					to: "/aliadosacreditaciones",
-				},
-
-				{
-					label: "Tarifas",
-					icon: "pi pi-book",
-					to: "/tarifas",
-				},
+				// {
+				// 	label: "cifras",
+				// 	icon: "pi pi-book",
+				// 	to: "/cifras",
+				// },
+				// {
+				// 	label: "FAQ",
+				// 	icon: "pi pi-book",
+				// 	to: "/faq",
+				// },
+				// {
+				// 	label: "Aliados",
+				// 	icon: "pi pi-book",
+				// 	to: "/aliados",
+				// },
+				// {
+				// 	label: "Sedes",
+				// 	icon: "pi pi-book",
+				// 	to: "/sedes",
+				// },
+				// {
+				// 	label: "Equipo",
+				// 	icon: "pi pi-book",
+				// 	to: "/equipo",
+				// },
 			],
 		},
 	];
@@ -483,13 +374,11 @@ const App = () => {
 							path='/documentosmodelos'
 							element={<DocumentosModelos />}
 						/>
+						<Route path='/galerialmodulos' element={<Galerias />} />
+						<Route path='/menugeneral' element={<Menugeneral />} />
 						<Route
-							path='/galerialmodulos'
-							element={<Galerias />}
-						/>
-						<Route
-							path='/menugeneral'
-							element={<Menugeneral />}
+							path='/botonesaplicaciones'
+							element={<BotonesModulos />}
 						/>
 
 						{/* Mi menu */}

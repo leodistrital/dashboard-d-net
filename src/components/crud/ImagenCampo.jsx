@@ -10,6 +10,7 @@ export const ImagenCampo = ({
 	CampoImagen,
 	edicampo = "",
 	urlupload,
+	url = true,
 }) => {
 	const toast = useRef(null);
 	const dispatch = useDispatch();

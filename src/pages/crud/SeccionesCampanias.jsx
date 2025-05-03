@@ -7,6 +7,7 @@ import {
 	Dialog,
 	InputText,
 	Dropdown,
+	Divider,
 } from "../../components/crud";
 import { Conexion } from "../../service/Conexion";
 import {
@@ -18,6 +19,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setDataSet, setFormData } from "../../store/appSlice";
 import { Cargando } from "../../components/crud/Cargando";
+import { ImagenCampo } from "../../components/crud/ImagenCampo";
+import { Carousel } from "primereact/carousel";
 
 export const SeccionesCampanas = () => {
 	const TABLA = "seccionescampana"; // Tabla a administrar
@@ -32,6 +35,7 @@ export const SeccionesCampanas = () => {
 	const [cargando, setCargando] = useState(false); // Estado para mostrar/ocultar el spinner de carga
 	const datatable = new Conexion(); // Instancia de la clase Conexion para manejar las peticiones
 	const [dropdownCapanias, setdropdownCapanias] = useState(null);
+	const [products, setProducts] = useState([]);
 
 	// Cargar los datos de la tabla al inicio o cuando se recargue
 	useEffect(() => {
@@ -157,6 +161,72 @@ export const SeccionesCampanas = () => {
 			</div>
 		);
 	};
+	const responsiveOptions = [
+		{
+			breakpoint: "480px",
+			numVisible: 2,
+			numScroll: 2,
+		},
+		{
+			breakpoint: "480px",
+			numVisible: 2,
+			numScroll: 2,
+		},
+		{
+			breakpoint: "480px",
+			numVisible: 1,
+			numScroll: 1,
+		},
+	];
+
+	const productTemplate = (product) => {
+		// console.log(product);
+		return (
+			<div className='product-item'>
+				<div className='product-item-content'>
+					<div className='mb-1'>
+						<img
+							src={`${product.img_dal}`}
+							onError={(e) =>
+								(e.target.src =
+									"https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png")
+							}
+							alt={product.name}
+							className='product-image'
+						/>
+					</div>
+					<div>
+						<div className='car-buttons mt-2'>
+							<Button
+								icon='pi pi-trash'
+								className='p-button p-button-rounded mr-2'
+								onClick={() => borrarImagen(product.id)}
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	};
+
+	const borrarImagen = (idImagen) => {
+		setCargando(true);
+		setProducts([]);
+		datatable
+			.getEliminarItem("galeriaimagenesdetalle", formData, idImagen)
+			.then((data) =>
+				datatable
+					.gettable(
+						"parametros/galeriaimagenesdetalle/" + formData.id
+					)
+					.then((datos) => {
+						// console.table(datos);
+						// console.log(datos.length);
+						setProducts(datos);
+						setCargando(false);
+					})
+			);
+	};
 
 	return (
 		<div className='grid'>
@@ -267,6 +337,33 @@ export const SeccionesCampanas = () => {
 								/>
 							</div>
 						</div>
+						<div className='field'>
+							{formData?.id && (
+								<ImagenCampo
+									label='Imagen'
+									formData={formData}
+									CampoImagen='img_dal'
+									nombreCampo='demo'
+									// edicampo={formData.img_not}
+									urlupload='/upload/images/galeria'
+								/>
+							)}
+						</div>
+						<Divider />
+						{products.length > 0 && (
+							<div className='carousel-demo'>
+								<div className='card'>
+									<Carousel
+										value={products}
+										numVisible={2}
+										numScroll={1}
+										responsiveOptions={responsiveOptions}
+										itemTemplate={productTemplate}
+										circular={true}
+									/>
+								</div>
+							</div>
+						)}
 					</Dialog>
 					<EliminarVentana
 						deleteProductDialog={deleteProductDialog}
