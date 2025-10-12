@@ -21,8 +21,11 @@ export const ImagenCampo = ({
 		const { resp } = JSON.parse(e.xhr.response);
 		// console.log(CampoImagen, resp.file);
 		let _temp = { ...formData };
-		_temp[`${CampoImagen}`] = resp.file;
-		// console.log(_temp);
+		url
+			? (_temp[`${CampoImagen}`] = resp.url)
+			: (_temp[`${CampoImagen}`] = resp.file);
+		// _temp[`${CampoImagen}`] = resp.file;
+		console.log(resp.file);
 		setsrcImage(resp.file);
 		dispatch(setFormData(_temp));
 

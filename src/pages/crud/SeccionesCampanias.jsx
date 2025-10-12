@@ -63,6 +63,12 @@ export const SeccionesCampanas = () => {
 		/** setting parametros dropdowns u otros objetos independientes */
 	}, []);
 
+	useEffect(() => {
+		// console.log("mi efecto detalle galeria", formData);
+		saveImagenDetalle();
+		console.log({ formData });
+	}, [formData]);
+
 	// Abrir el diálogo para crear una nueva sección
 	const openNew = () => {
 		dispatch(setFormData(emptyFormData)); // Limpiar el formulario
@@ -82,6 +88,15 @@ export const SeccionesCampanas = () => {
 	};
 
 	// Editar una sección existente
+	// const editProduct = (id) => {
+	// 	setCargando(true);
+	// 	datatable
+	// 		.getItem(TABLA, id)
+	// 		.then((data) => dispatch(setFormData({ ...data.data })));
+	// 	setProductDialog(true);
+	// 	setCargando(false);
+	// };
+
 	const editProduct = (id) => {
 		setCargando(true);
 		datatable
@@ -89,6 +104,13 @@ export const SeccionesCampanas = () => {
 			.then((data) => dispatch(setFormData({ ...data.data })));
 		setProductDialog(true);
 		setCargando(false);
+		datatable
+			.gettable("parametros/seccionescampanaimagenes/" + id)
+			.then((datos) => {
+				// console.table(datos);
+				setProducts(datos);
+				setCargando(false);
+			});
 	};
 
 	// Confirmar la eliminación de una sección
@@ -128,6 +150,35 @@ export const SeccionesCampanas = () => {
 					.then((data) => trasaccionExitosa());
 			}
 		}
+	};
+
+	const saveImagenDetalle = () => {
+		console.log("entro a insertar detalle");
+		// setSubmitted(true);
+		// if (formData.img_dal?.trim()) {
+		// 	setCargando(true);
+		// 	if (formData.id) {
+		// 		//nuevo registro
+		// 		datatable
+		// 			.getCrearItem("galeriaimagenesdetalle", formData)
+		// 			.then((data) => {
+		// 				setCargando(false);
+		// 				// console.log("llego al final");
+
+		// 				datatable
+		// 					.gettable(
+		// 						"parametros/galeriaimagenesdetalle/" +
+		// 							formData.id
+		// 					)
+		// 					.then((datos) => {
+		// 						// console.table(datos);
+		// 						// console.log(datos.length);
+		// 						setProducts(datos);
+		// 						setCargando(false);
+		// 					});
+		// 			});
+		// 	}
+		// }
 	};
 
 	// Eliminar una sección
@@ -186,7 +237,7 @@ export const SeccionesCampanas = () => {
 				<div className='product-item-content'>
 					<div className='mb-1'>
 						<img
-							src={`${product.img_dal}`}
+							src={`${product.ima_csi}`}
 							onError={(e) =>
 								(e.target.src =
 									"https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png")
@@ -345,7 +396,7 @@ export const SeccionesCampanas = () => {
 									CampoImagen='img_dal'
 									nombreCampo='demo'
 									// edicampo={formData.img_not}
-									urlupload='/upload/images/galeria'
+									urlupload='/upload/files/secciones_imagenes'
 								/>
 							)}
 						</div>

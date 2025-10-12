@@ -54,7 +54,7 @@ export const Galerias = () => {
 	useEffect(() => {
 		// console.log("mi efecto detalle galeria", formData);
 		saveImagenDetalle();
-		console.log({formData});
+		console.log({ formData });
 	}, [formData]);
 
 	/*eventos*/
@@ -112,7 +112,7 @@ export const Galerias = () => {
 	const saveProduct = () => {
 		setSubmitted(true);
 		if (formData.nom_gal?.trim()) {
-			// console.log(formData);
+			console.log(formData);
 			// debugger
 			setCargando(true);
 			if (formData.id == null) {
@@ -145,7 +145,7 @@ export const Galerias = () => {
 						datatable
 							.gettable(
 								"parametros/galeriaimagenesdetalle/" +
-								formData.id
+									formData.id
 							)
 							.then((datos) => {
 								// console.table(datos);
@@ -227,8 +227,8 @@ export const Galerias = () => {
 						<img
 							src={`${product.img_dal}`}
 							onError={(e) =>
-							(e.target.src =
-								"https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png")
+								(e.target.src =
+									"https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png")
 							}
 							alt={product.name}
 							className='product-image'
