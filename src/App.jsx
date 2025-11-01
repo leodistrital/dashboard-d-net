@@ -8,6 +8,8 @@ import { AppFooter } from "./AppFooter";
 import { AppMenu } from "./AppMenu";
 import { AppConfig } from "./AppConfig";
 
+//coemtario para el gestor de dnet
+
 // import { Dashboard } from "./components/Dashboard";
 
 // import {
